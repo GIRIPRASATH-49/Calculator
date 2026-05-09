@@ -1,0 +1,204 @@
+/* ── Reset & Base ───────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:         #0e0e0f;
+  --surface:    #1a1a1d;
+  --border:     #2e2e33;
+  --accent:     #f5a623;
+  --accent-dim: #c27e0f;
+  --text:       #f0ede8;
+  --text-muted: #7a7a82;
+  --btn-num:    #242428;
+  --btn-sp:     #2e2e36;
+  --btn-op:     #f5a623;
+  --btn-op-txt: #0e0e0f;
+  --btn-eq:     #f5a623;
+  --radius:     20px;
+  --gap:        10px;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 50% -10%, rgba(245,166,35,.15), transparent),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.02) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.02) 40px);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── Calculator Shell ───────────────────────────── */
+.calculator {
+  width: 340px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px 20px;
+  box-shadow:
+    0 0 0 1px rgba(245,166,35,.08),
+    0 32px 80px rgba(0,0,0,.7),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.calculator::before {
+  content: '';
+  position: absolute;
+  top: -60px; left: 50%;
+  transform: translateX(-50%);
+  width: 220px; height: 120px;
+  background: radial-gradient(ellipse, rgba(245,166,35,.18), transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Brand ──────────────────────────────────────── */
+.brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: var(--accent);
+  opacity: .6;
+  text-align: right;
+  margin-bottom: 12px;
+}
+
+/* ── Display ────────────────────────────────────── */
+.display {
+  background: rgba(0,0,0,.35);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px 14px;
+  margin-bottom: 18px;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.expression {
+  font-size: 13px;
+  color: var(--text-muted);
+  min-height: 18px;
+  word-break: break-all;
+  text-align: right;
+  transition: opacity .2s;
+}
+
+.result {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: 2px;
+  word-break: break-all;
+  transition: transform .1s ease, color .15s;
+}
+
+.result.pop {
+  transform: scale(1.04);
+  color: var(--accent);
+}
+
+/* ── Button Grid ────────────────────────────────── */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap);
+}
+
+/* ── Button Base ────────────────────────────────── */
+.btn {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 14px;
+  height: 68px;
+  font-family: 'DM Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--btn-num);
+  border-bottom: 3px solid rgba(0,0,0,.4);
+  transition:
+    background .12s,
+    transform .08s,
+    box-shadow .12s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(255,255,255,.12), transparent 60%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.btn:hover::after { opacity: 1; }
+
+.btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
+/* ── Special (AC, +/−, %) ───────────────────────── */
+.btn.special {
+  background: var(--btn-sp);
+  color: var(--accent);
+}
+
+/* ── Operators ──────────────────────────────────── */
+.btn.operator {
+  background: var(--btn-op);
+  color: var(--btn-op-txt);
+  font-size: 24px;
+  font-weight: 700;
+  border-bottom-color: var(--accent-dim);
+}
+
+.btn.operator:hover {
+  background: #f7b740;
+}
+
+.btn.operator.active {
+  background: var(--text);
+  color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* ── Equals ─────────────────────────────────────── */
+.btn.equals {
+  background: var(--btn-eq);
+  color: var(--btn-op-txt);
+  font-size: 26px;
+  font-weight: 700;
+  border-bottom-color: var(--accent-dim);
+}
+
+.btn.equals:hover { background: #f7b740; }
+
+/* ── Wide (0) ───────────────────────────────────── */
+.btn.wide {
+  grid-column: span 2;
+  text-align: left;
+  padding-left: 26px;
+}
+
+/* ── Ripple cursor tracking ─────────────────────── */
+.btn { --x: 50%; --y: 50%; }
